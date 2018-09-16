@@ -14,7 +14,31 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractHandler implements HttpHandler {
 
+    public void commonHandle(HttpExchange httpExchange, Class <? extends Controller> ctrlClass) throws IOException {
+        String response;
+        String [] args = getParameter(httpExchange);
+        Method method = getMethod(ctrlClass, httpExchange.getRequestMethod(), args.length);
 
+        try {
+            if(args.length == 0){
+                Object [] objects = (Object[]) method.invoke(ctrlClass.newInstance());
+                response = formatListForResponse(objects);
+
+            }else{
+                Object object = method.invoke(ctrlClass.newInstance(), args[0]);
+                response = object.toString();
+            }
+            sendResponse(httpExchange, response);
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private Method getMethod(Class ctrlClass, String annotation, int parametersCount){
 
