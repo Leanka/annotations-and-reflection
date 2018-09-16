@@ -32,6 +32,13 @@ public abstract class AbstractHandler implements HttpHandler {
         String urlData = fullPath.substring(contextPath.length());
         return urlData.split("/");
     }
-    
+
+
+
+    String formatListForResponse(Object [] objects){
+        return Arrays.stream(objects)
+                .map(obj -> String.format("<p>%s</p>", obj))
+                .collect(Collectors.joining("\n", "All users:", "The end!"));
+    }
 
 }
