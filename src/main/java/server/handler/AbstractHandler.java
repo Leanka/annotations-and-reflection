@@ -14,6 +14,17 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractHandler implements HttpHandler {
 
+    private String [] getParameter(HttpExchange exchange){
+        String [] args = {};
+        String [] urlParts = getUrlParts(exchange);
+        if(urlParts.length >= 2){
+            String temp = urlParts[1].trim();
+            if(!temp.isEmpty()){
+                args = Arrays.copyOfRange(urlParts,1, 2);
+            }
+        }
+        return args;
+    }
 
     private String [] getUrlParts(HttpExchange exchange){
         String fullPath = exchange.getRequestURI().getPath();
@@ -21,5 +32,6 @@ public abstract class AbstractHandler implements HttpHandler {
         String urlData = fullPath.substring(contextPath.length());
         return urlData.split("/");
     }
+    
 
 }
