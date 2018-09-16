@@ -33,7 +33,15 @@ public abstract class AbstractHandler implements HttpHandler {
         return urlData.split("/");
     }
 
+    void sendResponse(HttpExchange exchange, String response) throws IOException {
+        response = "<h1>"+response+"</h1>";
+        byte [] responseInBytes = response.getBytes();
+        exchange.sendResponseHeaders(200, response.length());
+        exchange.getResponseBody()
+                .write(responseInBytes);
+//                .close();
 
+    }
 
     String formatListForResponse(Object [] objects){
         return Arrays.stream(objects)
