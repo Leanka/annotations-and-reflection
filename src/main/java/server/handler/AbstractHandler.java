@@ -14,6 +14,19 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractHandler implements HttpHandler {
 
+
+
+    private Method getMethod(Class ctrlClass, String annotation, int parametersCount){
+
+        Optional <Method> method =
+                Arrays.stream(ctrlClass.getMethods())
+                .filter(meth -> meth.getAnnotation(WebRoute.class).value().equals(annotation))
+                .filter(meth -> meth.getParameterCount() == parametersCount)
+                .findFirst();
+
+        return method.orElse(null);
+    }
+
     private String [] getParameter(HttpExchange exchange){
         String [] args = {};
         String [] urlParts = getUrlParts(exchange);
